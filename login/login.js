@@ -1,4 +1,6 @@
 var PASSWORD = "123"; 
+var timer; 
+var coords = [];  
 
 $(document).ready(function() {
     
@@ -12,24 +14,77 @@ $(document).ready(function() {
     }); 
 
     $("#start").click( function(){
-    	$("#progress").show(); 
+        startTimer(true); 
     }); 
 
     $("#end").click( function(){
     	$("#progress").hide(); 
+        startTimer(false); 
+        printCoords(); 
     }); 
 
 	$("#submit").on("click", function(e) {
 	    e.preventDefault();
-
 	    checkPassword($("#password").val()); 
 	});
+
+    $("#genPassword").on("click", function(e) {
+        genPassword(); 
+    }); 
 });
 
+function genPassword(){
+    var password = ""; 
+
+    //TODO: Better password gen algorithm. 
+    for(var i = 0; i < coords.length; i++){
+        password += coords[i].latitude; 
+        password += coords[i].longitude; 
+    }
+
+    $("#password").val(password);
+}
 
 function checkPassword(password){
 	if(password === PASSWORD)
 		swal("Good job!", "Password match.", "success")
 	else
 	    sweetAlert("Oops...", "Password did not match.", "error");
+}
+
+function startTimer(start){
+    if(start)
+        timer = setInterval(getCoords, 1000);
+    else
+        window.clearInterval(timer)
+}
+
+function getCoords(){
+    $("#progress").show(); 
+
+    if (navigator.geolocation)
+        navigator.geolocation.getCurrentPosition(savePosition);
+    else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+        $("#progress").hide(); 
+    }
+}
+
+function savePosition(position) {
+    var coord = { latitude : position.coords.latitude , longitude : position.coords.longitude }; 
+    coords.push(coord); 
+}
+
+function printCoords(){
+    var coords_string = ""; 
+
+    for(var i = 0; i < coords.length; i++){
+        coords_string += "Lat: " + coords[i].latitude; 
+        coords_string += " Long: " + coords[i].longitude;  
+        coords_string += "<br/>"; 
+    }
+
+    $("#results_container").show(); 
+    $("#results").html(coords_string); 
+    $("#genPassword_container").show(); 
 }
