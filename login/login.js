@@ -17,7 +17,7 @@ $(document).ready(function() {
         startTimer(true); 
     }); 
 
-    $("#end").click( function(){
+    $("#stop").click( function(){
     	$("#progress").hide(); 
         startTimer(false); 
         printCoords(); 
