@@ -80,7 +80,7 @@ function getCoords(){
     $("#progress").show(); 
 
     if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(savePosition);
+        navigator.geolocation.getCurrentPosition(savePosition, {enableHighAccuracy: true});
     else {
         x.innerHTML = "Geolocation is not supported by this browser.";
         $("#progress").hide(); 
