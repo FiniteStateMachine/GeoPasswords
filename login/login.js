@@ -14,13 +14,26 @@ $(document).ready(function() {
     }); 
 
     $("#start").click( function(){
+      if($("#sel1")[0].selectedIndex == 0){
         startTimer(true); 
+        $("#progress").show(); 
+      }
+      else{
+        $("#recordLocation").show(); 
+      }
     }); 
 
     $("#stop").click( function(){
-    	$("#progress").hide(); 
+      if($("#sel1")[0].selectedIndex == 0){
         startTimer(false); 
+        $("#progress").hide(); 
         printCoords(); 
+      }
+      else{
+        $("#progress").hide(); 
+        $("#recordLocation").hide(); 
+        printCoords(); 
+      }
     }); 
 
 	$("#submit").on("click", function(e) {
@@ -30,6 +43,10 @@ $(document).ready(function() {
 
     $("#genPassword").on("click", function(e) {
         genPassword(); 
+    }); 
+
+    $("#recordLocation").on("click", function(e){
+        getCoords(); 
     }); 
 });
 
