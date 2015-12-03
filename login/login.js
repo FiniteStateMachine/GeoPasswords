@@ -79,13 +79,23 @@ function startTimer(start){
 function getCoords(){
     $("#progress").show(); 
 
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
     if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(savePosition, {enableHighAccuracy: true});
+        navigator.geolocation.getCurrentPosition(savePosition, error, options);
     else {
         x.innerHTML = "Geolocation is not supported by this browser.";
         $("#progress").hide(); 
     }
 }
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
 
 function savePosition(position) {
     var coord = { latitude : position.coords.latitude , longitude : position.coords.longitude }; 
