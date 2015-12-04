@@ -1,6 +1,7 @@
 var PASSWORD = "123"; 
 var timer; 
-var coords = [];  
+var coords = [];
+var pass = [];  
 
 $(document).ready(function() {
     
@@ -98,7 +99,15 @@ function error(err) {
 };
 
 function savePosition(position) {
-    var coord = { latitude : position.coords.latitude , longitude : position.coords.longitude }; 
+	var latitute = position.coords.latitude.toFixed(6);
+	latitute = parseFloat(latitute);
+	
+	var longitude = position.coords.longitude.toFixed(6);
+	longitude = parseFloat(longitude);
+	
+	var heading = position.coords.heading;
+	
+    var coord = { latitude : latitude , longitude : longitude, heading: heading }; 
     coords.push(coord); 
 }
 
