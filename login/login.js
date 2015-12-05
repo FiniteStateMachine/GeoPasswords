@@ -48,7 +48,11 @@ $(document).ready(function() {
 
     $("#recordLocation").on("click", function(e){
         getCoords(); 
-    }); 
+    });
+	var c1 = { latitude : 0.0 , longitude : 0.0, heading: 90 };
+	var c2 = { latitude : 0.0 , longitude : 12.0, heading: 0 };
+	var t = rotate(c2, c1["longitude"], c1["longitude"], 90);
+	alert(t["longitude"] + " " + t["latitude"]);
 });
 
 function genPassword(){
@@ -123,4 +127,34 @@ function printCoords(){
     $("#results_container").show(); 
     $("#results").html(coords_string); 
     $("#genPassword_container").show(); 
+}
+
+function rotate(coord, originX, originY, degree){
+	var tempX = coord["longitude"];
+	var tempY = coord["latitude"];
+	var rad = degree * Math.PI / 180;
+	
+	var t1 = Math.cos(rad);
+	var t2 = Math.sin(rad);
+	
+	var x = Math.cos(rad) * (tempX - originX) - Math.sin(rad) * (tempY - originY) + originX;
+	var y = Math.sin(rad) * (tempX - originX) + Math.cos(rad) * (tempY - originY) + originY;
+	
+	var point = {
+		longitude: x,
+		latitude: y
+		};
+		
+	return point;
+}
+
+function checkPass(attempt){
+	for(var i = 0; i < pass.length; i++)
+	{
+		if((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
+		   (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"])
+		   {
+				
+		   }
+	}
 }
