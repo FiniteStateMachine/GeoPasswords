@@ -70,31 +70,6 @@ $(document).ready(function() {
     }
   });
 
-	var c1 = { latitude : 0.0 , longitude : 0.0, heading: 90 };
-	var c2 = { latitude : 1.0 , longitude : 0.0, heading: 0 };
-	var testp = [];
-	testp.push(c1);
-	testp.push(c2);
-	
-	var c3 = { latitude : -1.0 , longitude : 1.0, heading: 0 };
-	var c4 = { latitude : -1.0 , longitude : 2.0, heading: 0 };
-	var attm = [];
-	attm.push(c3);
-	attm.push(c4);
-	
-	var attmt = translate(testp, attm);
-	var attmtr = [];
-	for(var i = 0; i < attmt.length; i++)
-	{
-		var pt = rotate(attmt[i], testp[0]["longitude"], testp[0]["latitude"], 90);
-		attmtr.push(pt);
-		alert(attmtr[i]["longitude"] + " " + attmtr[i]["latitude"]);
-	}
-	
-	//var t = rotate(c2, c1["longitude"], c1["longitude"], 90);
-	//alert(t["longitude"] + " " + t["latitude"]);
-});
-
   $("#setPassword").on("click", function(e){
     genPassword(true); 
   }); 
@@ -114,17 +89,20 @@ function genPassword(set){
       password += coords_from_file[i].longitude; 
     }
   }
-  // Otherwise from path. 
-  // TODO: Better algorithm. 
   else{
     for(var i = 0; i < coords.length; i++){
-      password += coords[i].latitude; 
-      password += coords[i].longitude; 
+      password += "" + coords[i].latitude; 
+      password += "" + coords[i].longitude; 
+      password += "" + coords[i].heading; 
     }
   }
 
-  if(set)
-    PASSWORD = password;
+  if(set){
+    if($("#sel1")[0].selectedIndex == 2)
+      PASSWORD = password;
+    else
+      pass = coords; 
+  }
   else
     $("#password").val(password);
 }
@@ -133,10 +111,49 @@ function genPassword(set){
  * Checks to see if your password matches PASSWORD
  */
 function checkPassword(password){
-	if(password === PASSWORD)
-		swal("Good job!", "Password match.", "success")
-	else
-	    sweetAlert("Oops...", "Password did not match.", "error");
+  if($("#sel1")[0].selectedIndex == 2){
+  	if(password === PASSWORD)
+  		swal("Good job!", "Password match.", "success")
+  	else
+  	    sweetAlert("Oops...", "Password did not match.", "error");
+  }
+  else
+  {
+    var attemptt = translate(pass, coords); 
+    var passHeading = pass[0]["heading"]; 
+    var coorHeading = coords[0]["heading"]; 
+    var rotateDegree = passHeading - coorHeading; 
+    var attempttr = []; 
+
+    for(var i = 0; i < attemptt.length; i++)
+    {
+      var pt = rotate(attemptt[i], pass[0]["longitude"], pass[0]["latitude"], rotateDegree);
+      attempttr.push(pt);
+    }
+
+    if(checkPasswordHelper(attempttr))
+      swal("Good job!", "Password match.", "success")
+    else
+      sweetAlert("Oops...", "Password did not match.", "error");
+
+  }
+}
+
+/*
+ * Check password helper function. 
+ */ 
+function checkPasswordHelper(attempt){
+  verified = true; 
+
+  for(var i = 0; i < pass.length; i++)
+  {
+    if(!((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
+       (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"]))
+       {
+        verified = false; 
+       }
+  }
+  return verified; 
 }
 
 /*
@@ -189,6 +206,9 @@ function savePosition(position) {
 	longitude = parseFloat(longitude);
 	
 	var heading = position.coords.heading;
+  if (heading == null){
+    heading = 0;
+  }
 	
   var coord = { latitude : latitude , longitude : longitude, heading: heading }; 
   coords.push(coord); 
@@ -286,15 +306,4 @@ function rotate(coord, originX, originY, degree){
 		};
 		
 	return point;
-}
-
-function checkPass(attempt){
-	for(var i = 0; i < pass.length; i++)
-	{
-		if(!((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
-		   (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"]))
-		   {
-				
-		   }
-	}
 }
