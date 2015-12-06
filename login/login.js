@@ -50,9 +50,28 @@ $(document).ready(function() {
         getCoords(); 
     });
 	var c1 = { latitude : 0.0 , longitude : 0.0, heading: 90 };
-	var c2 = { latitude : 0.0 , longitude : 12.0, heading: 0 };
-	var t = rotate(c2, c1["longitude"], c1["longitude"], 90);
-	alert(t["longitude"] + " " + t["latitude"]);
+	var c2 = { latitude : 1.0 , longitude : 0.0, heading: 0 };
+	var testp = [];
+	testp.push(c1);
+	testp.push(c2);
+	
+	var c3 = { latitude : -1.0 , longitude : 1.0, heading: 0 };
+	var c4 = { latitude : -1.0 , longitude : 2.0, heading: 0 };
+	var attm = [];
+	attm.push(c3);
+	attm.push(c4);
+	
+	var attmt = translate(testp, attm);
+	var attmtr = [];
+	for(var i = 0; i < attmt.length; i++)
+	{
+		var pt = rotate(attmt[i], testp[0]["longitude"], testp[0]["latitude"], 90);
+		attmtr.push(pt);
+		alert(attmtr[i]["longitude"] + " " + attmtr[i]["latitude"]);
+	}
+	
+	//var t = rotate(c2, c1["longitude"], c1["longitude"], 90);
+	//alert(t["longitude"] + " " + t["latitude"]);
 });
 
 function genPassword(){
@@ -129,6 +148,39 @@ function printCoords(){
     $("#genPassword_container").show(); 
 }
 
+function translate(p, input){
+	var originX = p[0]["longitude"];
+	var originY = p[0]["latitude"];
+	var x = input[0]["longitude"];
+	var y = input[0]["latitude"];
+	var xt;
+	var yt;
+	if(x > originX)
+	{
+		xt = -(x - originX);
+	}
+	else
+	{
+		xt = (originX - x);
+	}
+	if(y > originY)
+	{
+		yt = -(y - originY);
+	}
+	else
+	{
+		yt = (originY - y);
+	}
+	
+	for(var i = 0; i < input.length; i++)
+	{
+		input[i]["longitude"] += xt;
+		input[i]["latitude"] += yt;
+	}
+	
+	return input;
+}
+
 function rotate(coord, originX, originY, degree){
 	var tempX = coord["longitude"];
 	var tempY = coord["latitude"];
@@ -137,8 +189,8 @@ function rotate(coord, originX, originY, degree){
 	var t1 = Math.cos(rad);
 	var t2 = Math.sin(rad);
 	
-	var x = Math.cos(rad) * (tempX - originX) - Math.sin(rad) * (tempY - originY) + originX;
-	var y = Math.sin(rad) * (tempX - originX) + Math.cos(rad) * (tempY - originY) + originY;
+	var x = parseFloat(Math.cos(rad).toFixed(15)) * (tempX - originX) - parseFloat(Math.sin(rad).toFixed(15)) * (tempY - originY) + originX;
+	var y = parseFloat(Math.sin(rad).toFixed(15)) * (tempX - originX) + parseFloat(Math.cos(rad).toFixed(15)) * (tempY - originY) + originY;
 	
 	var point = {
 		longitude: x,
@@ -151,8 +203,8 @@ function rotate(coord, originX, originY, degree){
 function checkPass(attempt){
 	for(var i = 0; i < pass.length; i++)
 	{
-		if((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
-		   (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"])
+		if(!((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
+		   (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"]))
 		   {
 				
 		   }
