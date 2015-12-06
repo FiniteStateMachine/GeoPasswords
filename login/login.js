@@ -16,6 +16,7 @@ $(document).ready(function() {
   }); 
 
   $("#start").click( function(){
+    $("#results").html(""); 
     coords = []; 
     if($("#sel1")[0].selectedIndex == 0){
       startTimer(true); 
@@ -30,12 +31,10 @@ $(document).ready(function() {
     if($("#sel1")[0].selectedIndex == 0){
       startTimer(false); 
       $("#progress").hide(); 
-      printCoords(); 
     }
     else{
       $("#progress").hide(); 
       $("#recordLocation").hide(); 
-      printCoords(); 
     }
   }); 
 
@@ -212,6 +211,19 @@ function savePosition(position) {
 	
   var coord = { latitude : latitude , longitude : longitude, heading: heading }; 
   coords.push(coord); 
+
+  //print coord
+  $("#results_container").show(); 
+  $("#genPassword_container").show(); 
+
+  var coords_string = "Lat: " + coord.latitude; 
+  coords_string += " Long: " + coord.longitude; 
+  coords_string += " Heading: " + coord.heading; 
+  coords_string += "<br/>"; 
+
+  var _html = $("#results").html(); 
+  _html += coords_string; 
+  $("#results").html(_html); 
 }
 
 /*
