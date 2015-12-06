@@ -2,6 +2,7 @@ var PASSWORD = "";
 var timer; 
 var coords = [];  
 var coords_from_file = []; 
+var pass = [];  
 
 $(document).ready(function() {
     
@@ -68,6 +69,11 @@ $(document).ready(function() {
       $("#genPassword_container").hide(); 
     }
   });
+
+	var c1 = { latitude : 0.0 , longitude : 0.0, heading: 90 };
+	var c2 = { latitude : 0.0 , longitude : 12.0, heading: 0 };
+	var t = rotate(c2, c1["longitude"], c1["longitude"], 90);
+	alert(t["longitude"] + " " + t["latitude"]);
 
   $("#setPassword").on("click", function(e){
     genPassword(true); 
@@ -156,7 +162,15 @@ function error(err) {
  * Saves your current position to coords array
  */
 function savePosition(position) {
-  var coord = { latitude : position.coords.latitude , longitude : position.coords.longitude }; 
+	var latitude = position.coords.latitude.toFixed(6);
+	latitude = parseFloat(latitude);
+	
+	var longitude = position.coords.longitude.toFixed(6);
+	longitude = parseFloat(longitude);
+	
+	var heading = position.coords.heading;
+	
+  var coord = { latitude : latitude , longitude : longitude, heading: heading }; 
   coords.push(coord); 
 }
 
@@ -200,4 +214,34 @@ function readCoordsFromFile(){
     var coord = { latitude : lat, longitude : lng}; 
     coords_from_file.push(coord); 
   }
+}
+
+function rotate(coord, originX, originY, degree){
+	var tempX = coord["longitude"];
+	var tempY = coord["latitude"];
+	var rad = degree * Math.PI / 180;
+	
+	var t1 = Math.cos(rad);
+	var t2 = Math.sin(rad);
+	
+	var x = Math.cos(rad) * (tempX - originX) - Math.sin(rad) * (tempY - originY) + originX;
+	var y = Math.sin(rad) * (tempX - originX) + Math.cos(rad) * (tempY - originY) + originY;
+	
+	var point = {
+		longitude: x,
+		latitude: y
+		};
+		
+	return point;
+}
+
+function checkPass(attempt){
+	for(var i = 0; i < pass.length; i++)
+	{
+		if((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
+		   (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"])
+		   {
+				
+		   }
+	}
 }
