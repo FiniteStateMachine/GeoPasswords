@@ -143,11 +143,12 @@ function checkPassword(password){
  */ 
 function checkPasswordHelper(attempt){
   verified = true; 
+  var range = 0.00005; 
 
   for(var i = 0; i < pass.length; i++)
   {
-    if(!((pass[i]["longitude"] - 0.0005) < attempt[i]["longitude"] && (pass[i]["longitude"] + 0.0005) > attempt[i]["longitude"] &&
-       (pass[i]["latitude"] - 0.0005) < attempt[i]["latitude"] && (pass[i]["latitude"] + 0.0005) > attempt[i]["latitude"]))
+    if(!((pass[i]["longitude"] - range) < attempt[i]["longitude"] && (pass[i]["longitude"] + range) > attempt[i]["longitude"] &&
+       (pass[i]["latitude"] - range) < attempt[i]["latitude"] && (pass[i]["latitude"] + range) > attempt[i]["latitude"]))
        {
         verified = false; 
        }
@@ -315,7 +316,7 @@ function rotate(coord, originX, originY, degree){
 	var point = {
 		longitude: x,
 		latitude: y
-		};
+	};
 		
 	return point;
 }
