@@ -69,10 +69,17 @@
     <div class="row" style="display:none;" id="genPassword_container">
       <div class="col-md-4"></div>
       <div class="col-md-4" style="text-align:center;">
-        <iframe id="frmFile" src="password.txt" onload="readCoordsFromFile();" style="display: none;"></iframe>
         <button type="button" class="btn btn-secondary" style="margin-top: 30px; width: 200px;" id="setPassword">
           Set Password 
         </button>
+        <iframe id="frmFile" src="password.txt" onload="readCoordsFromFile();" style="display: none;"></iframe>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+
+    <div class="row" style="display:none;" id="enterPassword_container">
+      <div class="col-md-4"></div>
+      <div class="col-md-4" style="text-align:center;">
         <button type="button" class="btn btn-secondary" style="margin-top: 10px; width: 200px;" id="genPassword">
           Enter Password
         </button>

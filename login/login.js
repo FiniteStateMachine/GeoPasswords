@@ -17,6 +17,7 @@ $(document).ready(function() {
 
   $("#start").click( function(){
     $("#results").html(""); 
+    $("#password").val("");
     coords = []; 
     if($("#sel1")[0].selectedIndex == 0){
       startTimer(true); 
@@ -61,11 +62,13 @@ $(document).ready(function() {
       $("#buttons").hide(); 
       $("#results_container").hide(); 
       $("#genPassword_container").show(); 
+      $("#enterPassword_container").show(); 
     }
     else{
       $("#buttons").show(); 
       $("#results_container").show(); 
       $("#genPassword_container").hide(); 
+      $("#enterPassword_container").hide(); 
     }
   });
 
@@ -216,6 +219,7 @@ function savePosition(position) {
   //print coord
   $("#results_container").show(); 
   $("#genPassword_container").show(); 
+  $("#enterPassword_container").show(); 
 
   var coords_string = "Lat: " + coord.latitude; 
   coords_string += " Long: " + coord.longitude; 
@@ -242,6 +246,7 @@ function printCoords(){
   $("#results_container").show(); 
   $("#results").html(coords_string); 
   $("#genPassword_container").show(); 
+  $("#enterPassword_container").show(); 
 }
 
 /* 
