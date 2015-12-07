@@ -121,18 +121,21 @@ function checkPassword(password){
   }
   else
   {
+	//Translates the password attempt
     var attemptt = translate(pass, coords); 
     var passHeading = pass[0]["heading"]; 
     var coorHeading = coords[0]["heading"]; 
     var rotateDegree = passHeading - coorHeading; 
     var attempttr = []; 
 
+	//Rotates the password attempt
     for(var i = 0; i < attemptt.length; i++)
     {
       var pt = rotate(attemptt[i], pass[0]["longitude"], pass[0]["latitude"], rotateDegree);
       attempttr.push(pt);
     }
 
+	//Checks if the attempt matches the password
     if(checkPasswordHelper(attempttr))
       swal("Good job!", "Password match.", "success")
     else
@@ -146,6 +149,7 @@ function checkPassword(password){
  */ 
 function checkPasswordHelper(attempt){
   verified = true; 
+  //Threshold value to accept a password attempt
   var range = 0.00005; 
 
   for(var i = 0; i < pass.length; i++)
@@ -274,6 +278,8 @@ function readCoordsFromFile(){
   }
 }
 
+//Translates the input array of longitude/latitude points
+//in respect to an origin point x and y
 function translate(p, input){
 	var originX = p[0]["longitude"];
 	var originY = p[0]["latitude"];
@@ -281,6 +287,9 @@ function translate(p, input){
 	var y = input[0]["latitude"];
 	var xt;
 	var yt;
+	
+	//Calculates the x and y distances to be translated
+	//based on the origin x and y point
 	if(x > originX)
 	{
 		xt = -(x - originX);
@@ -298,6 +307,8 @@ function translate(p, input){
 		yt = (originY - y);
 	}
 	
+	//Translates the input array with the calculated
+	//xt and yt distances
 	for(var i = 0; i < input.length; i++)
 	{
 		input[i]["longitude"] += xt;
@@ -307,14 +318,18 @@ function translate(p, input){
 	return input;
 }
 
+//Rotates a longitude/latitude point in respect to an
+//origin point x, y and a specified degree
 function rotate(coord, originX, originY, degree){
 	var tempX = coord["longitude"];
 	var tempY = coord["latitude"];
 	var rad = degree * Math.PI / 180;
 	
-	var t1 = Math.cos(rad);
-	var t2 = Math.sin(rad);
+	//test variables
+	//var t1 = Math.cos(rad);
+	//var t2 = Math.sin(rad);
 	
+	//Calculates the newly rotated x and y point
 	var x = parseFloat(Math.cos(rad).toFixed(15)) * (tempX - originX) - parseFloat(Math.sin(rad).toFixed(15)) * (tempY - originY) + originX;
 	var y = parseFloat(Math.sin(rad).toFixed(15)) * (tempX - originX) + parseFloat(Math.cos(rad).toFixed(15)) * (tempY - originY) + originY;
 	
